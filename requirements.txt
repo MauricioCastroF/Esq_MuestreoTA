@@ -1,0 +1,11 @@
+streamlit
+earthengine-api
+geopandas
+simplekml
+fpdf2
+numpy
+pandas
+matplotlib
+scikit-learn
+shapely
+requests
