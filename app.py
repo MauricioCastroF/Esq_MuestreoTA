@@ -31,10 +31,11 @@ def authenticate_gee():
     try:
         if "GEE_JSON" in st.secrets:
             json_text = st.secrets["GEE_JSON"]
-            # Limpieza de escapes para evitar errores de JSON en Streamlit Cloud
+            # Limpieza profunda de escapes dobles
             json_text = json_text.replace("\\\\n", "\\n")
             json_key = json.loads(json_text, strict=False)
             
+            # Formatear la llave privada para el motor RSA
             if "private_key" in json_key:
                 json_key["private_key"] = json_key["private_key"].replace("\\n", "\n")
             
@@ -45,10 +46,10 @@ def authenticate_gee():
             ee.Initialize(credentials)
             return True
         else:
-            st.error("❌ No se encontró GEE_JSON en los Secrets.")
+            st.error("No se encontró el secreto GEE_JSON.")
             return False
     except Exception as e:
-        st.error(f"❌ Error de autenticación: {e}")
+        st.error(f"Error de autenticación: {e}")
         return False
 
 # ==========================================
