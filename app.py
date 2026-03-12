@@ -22,15 +22,31 @@ st.markdown("Generación automatizada de puntos de muestreo basados en el índic
 # 2. AUTENTICACIÓN (Service Account)
 def authenticate_gee():
     try:
-        # Los secretos deben estar configurados en Streamlit Cloud
         if "GEE_JSON" in st.secrets:
-            json_key = json.loads(st.secrets["GEE_JSON"])
-            credentials = ee.ServiceAccountCredentials(json_key['client_email'], key_data=json.dumps(json_key))
+            # 1. Recuperar el texto crudo
+            json_text = st.secrets["GEE_JSON"]
+            
+            # 2. Limpieza de escapes (El "Golden Fix" para Streamlit)
+            # Esto elimina los dobles escapes que rompen json.loads
+            json_text = json_text.replace("\\\\n", "\\n")
+            
+            # 3. Cargar el JSON de forma estricta pero tolerante a espacios
+            json_key = json.loads(json_text, strict=False)
+            
+            # 4. Asegurar que la clave privada tenga los saltos de línea reales que GEE requiere
+            if "private_key" in json_key:
+                json_key["private_key"] = json_key["private_key"].replace("\\n", "\n")
+            
+            # 5. Inicializar con credenciales refinadas
+            credentials = ee.ServiceAccountCredentials(
+                json_key['client_email'], 
+                key_data=json.dumps(json_key)
+            )
             ee.Initialize(credentials)
+            return True
         else:
-            # Opción local para desarrollo
-            ee.Initialize()
-        return True
+            st.error("No se encontró el secreto GEE_JSON en la configuración.")
+            return False
     except Exception as e:
         st.error(f"Error de autenticación en GEE: {e}")
         return False
