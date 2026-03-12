@@ -30,15 +30,20 @@ Optimizado con filtrado IQR y clustering K-Means.
 def authenticate_gee():
     try:
         if "GEE_JSON" in st.secrets:
+            # 1. Recuperar el texto
             json_text = st.secrets["GEE_JSON"]
-            # Limpieza profunda de escapes dobles
+            
+            # 2. LIMPIEZA CRÍTICA: Corregir escapes dobles que rompen el JSON
             json_text = json_text.replace("\\\\n", "\\n")
+            
+            # 3. Cargar el JSON (usamos strict=False para ser más tolerantes)
             json_key = json.loads(json_text, strict=False)
             
-            # Formatear la llave privada para el motor RSA
+            # 4. Asegurar que la clave privada tenga los saltos de línea reales
             if "private_key" in json_key:
                 json_key["private_key"] = json_key["private_key"].replace("\\n", "\n")
             
+            # 5. Inicializar GEE
             credentials = ee.ServiceAccountCredentials(
                 json_key['client_email'], 
                 key_data=json.dumps(json_key)
@@ -49,7 +54,8 @@ def authenticate_gee():
             st.error("No se encontró el secreto GEE_JSON.")
             return False
     except Exception as e:
-        st.error(f"Error de autenticación: {e}")
+        # Mostramos un error más limpio
+        st.error(f"Error de configuración en las llaves: {e}")
         return False
 
 # ==========================================
