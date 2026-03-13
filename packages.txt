@@ -1,4 +1,6 @@
 libgdal-dev
 libproj-dev
 libgeos-dev
+gdal-bin
+python3-dev
 g++
