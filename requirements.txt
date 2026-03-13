@@ -1,5 +1,5 @@
 streamlit
-earthengine-api
+earthengine-api<1.0.0
 geemap
 geopandas
 pandas
@@ -9,5 +9,5 @@ seaborn
 simplekml
 fpdf
 setuptools
-python-box==7.0.1
+python-box==6.0.2
 xyzservices
