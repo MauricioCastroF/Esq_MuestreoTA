@@ -9,3 +9,5 @@ seaborn
 simplekml
 fpdf
 setuptools
+python-box==7.0.1
+xyzservices
