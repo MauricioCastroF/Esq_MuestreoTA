@@ -1,0 +1,15 @@
+streamlit
+earthengine-api
+geemap==0.34.3
+geopandas
+pandas
+numpy
+requests
+matplotlib
+seaborn
+shapely
+scikit-learn
+fpdf
+simplekml
+google-auth
+setuptools
