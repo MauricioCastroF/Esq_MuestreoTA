@@ -9,5 +9,6 @@ seaborn
 simplekml
 fpdf
 setuptools
+wheel
 python-box==6.0.2
 xyzservices
